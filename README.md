@@ -88,13 +88,13 @@ The Streamlit web app for this repo is already deployed through Streamlit's comm
 ---
 
 ### Installation Instructions
-1. Clone the repository
+1. Clone the repository.
 
-2. Install required dependencies from the `requirements.txt` file
+2. Install required dependencies from the `requirements.txt` file.
 
-3. (if planning to run jupyter notebook) Download original datasets into the `datasets` folder
+3. (if planning to run jupyter notebook) Download original datasets into the `datasets` folder.
 - Dataset 1: [Global Climate Events and Economic Impact Dataset](https://www.kaggle.com/datasets/uom190346a/global-climate-events-and-economic-impact-dataset/data)
 
 - Dataset 2: [Global Economic Indicators (2010–2025) - World Bank](https://www.kaggle.com/datasets/tanishksharma9905/global-economic-indicators-20102025)
 
-4. Run the Streamlit web dashboard through `App_Overview.py`
+4. Run the Streamlit web dashboard through `App_Overview.py`.
