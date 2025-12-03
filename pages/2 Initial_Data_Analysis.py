@@ -45,7 +45,7 @@ with tab1:
    **Cleaning and Standardization Steps**
    - Removed irrelevant or unused columns, including metadata identifiers.
    - Standardized date fields by converting all date strings into datetime objects.
-   - Cleaned categorical variables such as event_type and country to ensure consistent naming.
+   - Cleaned categorical variables such as `event_type` and `country` to ensure consistent naming.
    - Converted all numeric fields to numeric types.
 
    **Encoding**

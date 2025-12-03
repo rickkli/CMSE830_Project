@@ -370,39 +370,28 @@ with tab5:
     st.markdown("""
     This section provides statistical summaries of all three datasets used in the analysis to establish an understanding of their structure, distributions, and variability.
                 
-    Descriptive statistics such as mean, median, standard deviation, and range are presented for key numerical variables in each dataset, which help characterize the data before advanced exploration
-    """)
-
-    st.divider()
-
-    # --- Natural Disaster Dataset Summary ---
-    #st.subheader("Natural Disasters Dataset")
-    st.markdown("""
-    **Natural Disasters Dataset**
-    """)
-
-    st.dataframe(disaster_df.describe().T, use_container_width=True)
-
-    st.divider()
-
-    # --- Economic Indicators Dataset Summary ---
-    st.markdown("""
-    **Economic Indicators Dataset**
-    """)
-
-    st.dataframe(indicators_df_imputed.describe().T, use_container_width=True)
-
-    st.divider()
-
-    # --- Demographics Dataset Summary ---
-    st.markdown("""
-    **Demographics Dataset**
-    """)
-
-    st.dataframe(demographic_df_imputed.describe().T, use_container_width=True)
-
-    st.divider()
-
-    st.markdown("""
+    Descriptive statistics such as mean, median, standard deviation, and range are presented for key numerical variables in each dataset, which help characterize the data before advanced exploration.
+                
     Together, these summaries provide a quantitative foundation for deeper analysis, helping to identify variables with wide ranges or potential outliers that may warrant further investigation in the visualization and modeling stages.
     """)
+
+    st.divider()
+
+    # Dropdown to select dataset
+    dataset_option = st.selectbox(
+        "Select a Dataset",
+        ["Natural Disasters Dataset", "Economic Indicators Dataset", "Demographics Dataset"]
+    )
+
+    # Display the corresponding dataframe summary
+    if dataset_option == "Natural Disasters Dataset":
+        #st.markdown("**Natural Disasters Dataset**")
+        st.dataframe(disaster_df.describe().T, use_container_width=True)
+
+    elif dataset_option == "Economic Indicators Dataset":
+        #st.markdown("**Economic Indicators Dataset**")
+        st.dataframe(indicators_df_imputed.describe().T, use_container_width=True)
+
+    elif dataset_option == "Demographics Dataset":
+        #st.markdown("**Demographics Dataset**")
+        st.dataframe(demographic_df_imputed.describe().T, use_container_width=True)

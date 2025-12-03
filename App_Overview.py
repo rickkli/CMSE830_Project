@@ -44,8 +44,7 @@ with tab1:
    economic systems, and population characteristics. Disasters influence countries differently depending on 
    their economic structure, demographic composition, and overall exposure to hazard-prone conditions.
 
-   This application brings together three interconnected datasets covering the years 2020–2025:  
-   global disaster event records, key socioeconomic indicators, and demographic profiles.  
+   This application brings together three interconnected datasets covering the years 2020–2025.
    By combining these sources, the platform provides a comprehensive foundation for examining how disasters 
    interact with economic performance and population vulnerability at a global scale.
 
@@ -120,7 +119,7 @@ with tab2:
       st.subheader("Economic Indicators Dataset")
       st.markdown("""
       Description:
-      This dataset contains country-level economic indicators used to measure the economic health, performance, and resilience** of nations.  
+      This dataset contains country-level economic indicators used to measure the economic health, performance, and resilience of nations.  
       It provides annual data from 2010 to 2025, including key macroeconomic variables such as GDP, inflation, unemployment, and public debt.  
 
       Variables:
