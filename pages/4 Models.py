@@ -161,7 +161,7 @@ with tab1:
                 "Max Features",
                 min_value=0.1,
                 max_value=1.0,
-                value=st.session_state["fraction_input"],
+                #value=st.session_state["fraction_input"],
                 step=0.1,
                 key="fraction_input",
                 on_change=_on_fraction_change
