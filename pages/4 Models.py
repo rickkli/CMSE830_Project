@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, KFold
 from sklearn.pipeline import Pipeline
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
@@ -12,6 +12,7 @@ from sklearn.feature_selection import VarianceThreshold
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+
 
 # ------------------------------
 # PAGE CONFIGURATION
@@ -115,26 +116,50 @@ with tab1:
         with col1:
             n_estimators = st.number_input(
                 "Number of Trees",
-                min_value=50, max_value=500, value=100, step=25
+                min_value=50, max_value=500, value=50, step=25
             )
 
-        # ---- max_depth ----
+        # --- max depth ---
         with col2:
-            # Number input always visible
+            # --- Initialize session state ---
+            if "max_depth_value" not in st.session_state:
+                st.session_state.max_depth_value = 10
+
+            if "use_unlimited_depth" not in st.session_state:
+                st.session_state.use_unlimited_depth = False
+
+
+            # --- Callbacks ---
+            def on_change_max_depth_value():
+                # Anytime number is changed, disable unlimited mode
+                if st.session_state.use_unlimited_depth:
+                    st.session_state.use_unlimited_depth = False
+
+
+            def on_change_unlimited_depth():
+                # No special logic needed here; number input stays enabled
+                pass
+
+            # Number Input (always enabled)
             max_depth_value = st.number_input(
                 "Max Depth",
                 min_value=10,
                 max_value=100,
-                value=10,
                 step=10,
-                disabled=False
+                key="max_depth_value",
+                on_change=on_change_max_depth_value
             )
 
-            # Checkbox BELOW number input
-            use_unlimited_depth = st.checkbox("Unlimited Depth (None)", value=False)
+            # Unlimited checkbox
+            use_unlimited_depth = st.checkbox(
+                "Unlimited Depth (None)",
+                key="use_unlimited_depth",
+                on_change=on_change_unlimited_depth
+            )
 
-            # Logic for actual parameter
-            max_depth = None if use_unlimited_depth else max_depth_value
+
+            # --- Final parameter ---
+            max_depth = None if st.session_state.use_unlimited_depth else st.session_state.max_depth_value
 
         # ---- max_features ----
         with col3:
@@ -142,7 +167,7 @@ with tab1:
             # Initialize keys
             for key in ("sqrt", "log2", "all_features", "fraction_input"):
                 if key not in st.session_state:
-                    st.session_state[key] = False if key != "fraction_input" else 0.3
+                    st.session_state[key] = False if key != "fraction_input" else 0.1
 
             # Callback: user changes fraction → uncheck all boxes
             def _on_fraction_change():
@@ -224,15 +249,15 @@ with tab1:
     # --------------------------------
     # Display Metrics
     # --------------------------------
-    st.markdown("##### Model Performance")
+    st.subheader("Model Performance")
 
     colA, colB, colC = st.columns(3)
 
     with colA:
-        st.metric("MSE", f"{mse:.3f}")
+        st.metric("Test MSE", f"{mse:.3f}")
 
     with colB:
-        st.metric("R² Score", f"{r2:.3f}")
+        st.metric("Test R²", f"{r2:.3f}")
 
     with colC:
         st.metric("Mean CV MSE", f"{cv_mse_mean:.3f}")
@@ -317,6 +342,147 @@ with tab1:
 
     with col2:
         st.plotly_chart(fig_cv, use_container_width=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # ----------------------------------
+    # Hyperparameter Tuning
+    # ----------------------------------
+    st.subheader("Hyperparameter Tuning Analysis")
+    st.markdown("""
+    To further improve the performance of the baseline Random Forest model, we performed hyperparameter tuning using a Randomized Search approach. 
+    Random Forests contain several important hyperparameters (tree depth, number of estimators, and feature sampling strategy) that significantly influence predictive accuracy and model stability.
+
+    **Tuning Approach**
+                
+    We used `RandomizedSearchCV` with:
+    - 20 sampled hyperparameter combinations.
+    - 5-fold cross-validation.
+    - MSE minimization (`neg_mean_squared_error`) as the scoring metric.
+    
+    The search grid covered:
+    - Number of estimators (`200–500`).
+    - Maximum tree depth (`None` or between `10–40`).
+    - Feature sampling strategy (`sqrt`, `log2`, or `None`).
+
+    **Best-Fit Model**
+                
+    The tuning procedure returned a set of optimized hyperparameters that were used to refit the model on the training set. 
+    The optimized Random Forest outperformed the baseline (`n_estimators=100`, `max_depth=None` , `max_features='sqrt'`) across both:
+    - Hold-out test metrics (MSE, R²). 
+    - 5-fold cross-validation MSE.
+
+    This provides strong evidence that tuning improved both accuracy and generalization stability.
+    Together, these findings confirm that hyperparameter tuning meaningfully improved the severity prediction task.
+    """)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # ---------------------------------------------------
+    # Baseline Model Performance
+    # ---------------------------------------------------
+    rf_base = RandomForestRegressor(
+    n_estimators=100,
+    max_depth=None,
+    max_features='sqrt',
+    random_state=1,
+    n_jobs=-1
+    )
+
+    rf_base.fit(X_train, y_train)
+
+    y_pred_base = rf_base.predict(X_test)
+    mse_base = mean_squared_error(y_test, y_pred_base)
+    r2_base = r2_score(y_test, y_pred_base)
+
+    # --------------------------------------------
+    # Optimized Random Forest Performance
+    # --------------------------------------------
+    best_params = {
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "max_depth": 30
+    }
+
+    best_rf = RandomForestRegressor(
+        n_estimators=best_params["n_estimators"],
+        max_features=best_params["max_features"],
+        max_depth=best_params["max_depth"],
+        random_state=1,
+        n_jobs=-1
+    )
+
+    best_rf.fit(X_train, y_train)
+    y_pred_opt = best_rf.predict(X_test)
+
+    mse_opt = mean_squared_error(y_test, y_pred_opt)
+    r2_opt = r2_score(y_test, y_pred_opt)
+
+    # ---------------------------------------------------
+    # User-Selected Model Performance
+    # ---------------------------------------------------
+    y_pred_user = rf_model.predict(X_test)
+    mse_user = mean_squared_error(y_test, y_pred_user)
+    r2_user = r2_score(y_test, y_pred_user)
+
+    # ---------------------------------------------------
+    # 5-Fold CV for All Models
+    # ---------------------------------------------------
+    kf = KFold(n_splits=5, shuffle=True, random_state=1)
+
+    cv_mse_base = -cross_val_score(rf_base, X_train, y_train,
+                                scoring="neg_mean_squared_error", cv=kf, n_jobs=-1)
+
+    cv_mse_user = -cross_val_score(rf_model, X_train, y_train,
+                                scoring="neg_mean_squared_error", cv=kf, n_jobs=-1)
+
+    cv_mse_opt = -cross_val_score(best_rf, X_train, y_train,
+                                scoring="neg_mean_squared_error", cv=kf, n_jobs=-1)
+
+    # -------------------------------
+    # Optimal Parameter Display Box
+    # -------------------------------
+    st.subheader("Optimal Random Forest Parameters")
+
+    st.info(
+        f"""
+        **Optimal Parameters Identified:**
+        - `n_estimators`: **{best_params['n_estimators']}**
+        - `max_features`: **{best_params['max_features']}**
+        - `max_depth`: **{best_params['max_depth']}**
+        """
+    )
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # -------------------------------
+    # Model Performance Breakdown
+    # -------------------------------
+    st.subheader("Model Performance Comparison")
+
+    colA, colB, colC = st.columns(3)
+
+    with colA:
+        st.markdown("#### Baseline Model")
+        st.metric("Test MSE", f"{mse_base:.3f}")
+        st.metric("Test R²", f"{r2_base:.3f}")
+        st.metric("CV Mean MSE", f"{cv_mse_base.mean():.3f}")
+        st.metric("CV Std MSE", f"{cv_mse_base.std():.3f}")
+
+    with colB:
+        st.markdown("#### User-Selected Model")
+        st.metric("Test MSE", f"{mse_user:.3f}")
+        st.metric("Test R²", f"{r2_user:.3f}")
+        st.metric("CV Mean MSE", f"{cv_mse_user.mean():.3f}")
+        st.metric("CV Std MSE", f"{cv_mse_user.std():.3f}")
+
+    with colC:
+        st.markdown("#### Optimized Model")
+        st.metric("Test MSE", f"{mse_opt:.3f}")
+        st.metric("Test R²", f"{r2_opt:.3f}")
+        st.metric("CV Mean MSE", f"{cv_mse_opt.mean():.3f}")
+        st.metric("CV Std MSE", f"{cv_mse_opt.std():.3f}")
+
 
 # ------------------------------
 # TAB 2

@@ -57,7 +57,7 @@ After cleaning and imputation, exploratory data analysis (EDA) was conducted to 
 
 **Choropleth Map:**
 - The choropleth map provided a global overview of disaster impact by visualizing countries colored according to their total economic impact for all years.
-- 
+
 **Heatmap:**
 - This heatmap highlighted geographical locations with the highest frequency of disasters along with their intensity and impact on populations.
 
