@@ -448,8 +448,8 @@ with tab1:
         f"""
         **Optimal Parameters Identified:**
         - `n_estimators`: **{best_params['n_estimators']}**
-        - `max_features`: **{best_params['max_features']}**
         - `max_depth`: **{best_params['max_depth']}**
+        - `max_features`: **{best_params['max_features']}**
         """
     )
     
