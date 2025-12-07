@@ -393,6 +393,7 @@ with tab1:
         st.subheader("Hyperparameter Tuning Analysis")
         st.markdown("""
         To further improve the performance of the baseline Random Forest model, we performed hyperparameter tuning using a Randomized Search approach. 
+        
         Random Forests contain several important hyperparameters (tree depth, number of estimators, and feature sampling strategy) that significantly influence predictive accuracy and model stability.
 
         **Tuning Approach**
@@ -409,7 +410,8 @@ with tab1:
 
         **Best-Fit Model**
                     
-        The tuning procedure returned a set of optimized hyperparameters that were used to refit the model on the training set. 
+        The tuning procedure returned a set of optimized hyperparameters that were used to refit the model on the training set.
+                    
         The optimized Random Forest outperformed the baseline (`n_estimators=100`, `max_depth=None` , `max_features='sqrt'`) across both:
         - Hold-out test metrics (MSE, R²). 
         - 5-fold cross-validation MSE.
@@ -485,6 +487,9 @@ with tab1:
         # Optimal Parameter Display Box
         # -------------------------------
         st.subheader("Optimal Random Forest Parameters")
+        st.markdown("""
+        The hyperparameter tuning process identified the following optimal parameters for the Random Forest model.
+        """)
 
         st.info(
             f"""
@@ -516,6 +521,13 @@ with tab1:
             """
         
         st.subheader("Model Performance Comparison")
+        st.markdown("""
+        Additionally, we can compare the performances of the baseline model, the user-configured model, and the optimized model.
+                    
+        By evaluating each model using consistent cross-validation metrics, we can assess how parameter tuning influences predictive accuracy and determine whether the optimized configuration offers a meaningful improvement. 
+        
+        The visualized results highlight differences in error reduction, model stability across folds, and overall predictive performance.
+        """)
 
         # Metric options
         metric_options = {
