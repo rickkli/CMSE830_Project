@@ -84,8 +84,6 @@ with tab1:
     # Sort filtered data by count descending
     subset = subset.sort_values(by='count', ascending=False)
 
-    st.write("")
-
     # ------------------------------
     # VISUALIZATION
     # ------------------------------
@@ -219,8 +217,8 @@ with tab3:
 
     st.markdown("""
     This map visualizes the total affected population by country for the selected year.
-    It highlights where disasters had the greatest human impact, helping identify regional
-    vulnerability and geographic clustering of high-impact events.
+    
+    It highlights where disasters had the greatest human impact, helping identify regional vulnerability and geographic clustering of high-impact events.
     """)
 
     st.divider()
@@ -289,6 +287,7 @@ with tab4:
     st.markdown(
     """
     This map visualizes the geographic distribution and intensity of disaster events for the selected year.
+
     Using a heatmap layer, it highlights physical locations of natural disasters with higher disaster density and affected populations.
     """)
 

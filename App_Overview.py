@@ -38,15 +38,13 @@ tab1, tab2 = st.tabs([
 # TAB 1 – APP OVERVIEW AND GOALS
 # ------------------------------
 with tab1:
-   st.header("Overview")
+   st.subheader("Overview")
    st.markdown("""
-   Assessing the global impact of natural disasters requires an integrated view of environmental events, 
-   economic systems, and population characteristics. Disasters influence countries differently depending on 
-   their economic structure, demographic composition, and overall exposure to hazard-prone conditions.
+   Disasters influence countries differently depending on their economic structure, demographic composition, and overall exposure to hazard-prone conditions.
+  
+   Therefore, assessing the global impact of natural disasters requires an integrated view of environmental events, economic systems, and population characteristics. 
 
-   This application brings together three interconnected datasets covering the years 2020–2025.
-   By combining these sources, the platform provides a comprehensive foundation for examining how disasters 
-   interact with economic performance and population vulnerability at a global scale.
+   By combining three interconnected datasets, the platform provides a comprehensive foundation for examining how disasters interact with economic performance and population vulnerability at a global scale.
 
    The analytical framework of this project supports examination of questions such as:
    - How disaster frequency and severity correspond to fluctuations in economic output, employment, or income levels.
@@ -55,13 +53,12 @@ with tab1:
    - Which countries or regions exhibit elevated vulnerability when economic and demographic risk factors overlap.
    - How patterns of resilience and long-term recovery vary across geographic regions and over time.
 
-   This integrated approach offers a clearer understanding of the multifaceted impacts of natural disasters 
-   and the social and economic contexts in which they occur.
+   This integrated approach offers a clearer understanding of the multifaceted impacts of natural disasters and the social and economic contexts in which they occur.
    """)
 
    st.divider()
 
-   st.header("Project Goals")
+   st.subheader("Project Goals")
    st.markdown("""
    1. Develop a unified analytical framework that merges disaster, economic indicator, and demographic datasets.  
    2. Assess how demographic characteristics influence exposure, impact severity, and post-disaster economic outcomes.  
@@ -85,10 +82,11 @@ with tab2:
       st.subheader("Natural Disasters Dataset")
       st.markdown("""
       Description:
-      This dataset contains information on natural disaster events worldwide from 2020 – 2025.  
+      This dataset contains information on natural disaster events worldwide from 2020 – 2025.
+                  
       It includes attributes describing the type, location, severity, and human/economic impact of each event.
 
-      Variables:
+      **Variables:**
       - `date` — Date of occurrence  
       - `year` — Year of occurrence  
       - `month` — Month of occurrence  
@@ -119,10 +117,11 @@ with tab2:
       st.subheader("Economic Indicators Dataset")
       st.markdown("""
       Description:
-      This dataset contains country-level economic indicators used to measure the economic health, performance, and resilience of nations.  
-      It provides annual data from 2010 to 2025, including key macroeconomic variables such as GDP, inflation, unemployment, and public debt.  
+      This dataset contains country-level economic indicators used to measure the economic health, performance, and resilience of nations.
+                  
+      It provides annual data from 2010 to 2025, including key macroeconomic variables such as GDP, inflation, unemployment, and public debt.
 
-      Variables:
+      **Variables:**
       - `country_name` — Full name of the country
       - `year` — The year the data corresponds to (from 2010 to 2025)  
       - `Inflation (CPI %)` — Annual consumer price inflation  
@@ -151,12 +150,11 @@ with tab2:
       st.subheader("Demographics Dataset")
       st.markdown("""
       Description:  
-      This dataset provides annual demographic information for each country, including population size, 
-      growth dynamics, age structure, and mortality patterns.  
-      These characteristics are essential for understanding population vulnerability, exposure to hazards, 
-      and the capacity for long-term recovery.
+      This dataset provides annual demographic information for each country, including population size, growth dynamics, age structure, and mortality patterns.
+                   
+      These characteristics are essential for understanding population vulnerability, exposure to hazards, and the capacity for long-term recovery.
 
-      Variables:
+      **Variables:**
       - `Name` — Country name  
       - `Year` — Reference year of demographic statistics  
       - `Total Population` — Total national population  
